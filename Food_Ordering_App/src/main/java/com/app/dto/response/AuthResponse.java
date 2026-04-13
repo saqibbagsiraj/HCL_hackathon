@@ -1,4 +1,9 @@
 package com.app.dto.response;
 
-public class AuthResponse {
+public record AuthResponse(
+        String message,
+        String email,
+        String role,
+        String authType
+) {
 }

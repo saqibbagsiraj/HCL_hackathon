@@ -1,4 +1,12 @@
 package com.app.dto.request;
 
-public class MenuRequest {
+import java.math.BigDecimal;
+
+public record MenuRequest(
+        Integer restaurantId,
+        String name,
+        String description,
+        BigDecimal price,
+        Boolean isAvailable
+) {
 }

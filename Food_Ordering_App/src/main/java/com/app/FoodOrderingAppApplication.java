@@ -1,4 +1,4 @@
-package com.food_ordering_app.food_ordering_app;
+package com.app;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

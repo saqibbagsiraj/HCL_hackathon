@@ -1,4 +1,7 @@
 package com.app.dto.request;
 
-public class LoginRequest {
+public record LoginRequest(
+        String email,
+        String password
+) {
 }
