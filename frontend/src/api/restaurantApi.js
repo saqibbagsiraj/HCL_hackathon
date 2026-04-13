@@ -19,10 +19,10 @@ export const getMyRestaurantApi = () =>
   axiosInstance.get('/restaurants/my');
 
 /**
- * GET /api/restaurants/:id/menu
+ * GET /api/menu/restaurant/:id
  */
 export const getMenuApi = (restaurantId) =>
-  axiosInstance.get(`/restaurants/${restaurantId}/menu`);
+  axiosInstance.get(`/menu/restaurant/${restaurantId}`);
 
 /**
  * GET /api/menu/:id

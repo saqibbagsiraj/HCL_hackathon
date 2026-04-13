@@ -1,11 +1,11 @@
 import axiosInstance from './axiosInstance';
 
 /**
- * POST /api/orders  — place a new order (MOCKED FOR DESIGN TESTING)
+ * POST /api/orders  — place a new order
  * @param {{ restaurantId: number, items: [{itemId: number, quantity: number}] }} data
  */
 export const placeOrderApi = (data) =>
-  new Promise((resolve) => setTimeout(() => resolve({ data: { success: true } }), 1500));
+  axiosInstance.post('/orders', data);
 
 /**
  * GET /api/orders/my  — current user's order history

@@ -7,15 +7,12 @@ import { decodeToken, isTokenExpired, getRoleFromToken } from '../utils/jwtDecod
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  // MOCK USER FOR DESIGN CHECK (Change back to null later)
-  const [user, setUser]       = useState({ name: 'Designer', email: 'test@test.com', role: 'ADMIN', token: 'fake' });
-  const [loading, setLoading] = useState(false);  // Set boolean false to bypass loading spinner
+  const [user, setUser]       = useState(null);   // { name, email, role, token }
+  const [loading, setLoading] = useState(true);   // initial hydration
   const navigate = useNavigate();
 
   // ── Hydrate from localStorage on mount ──────────────────────────────────
   useEffect(() => {
-    // COMMENTED OUT HYDRATION TO KEEP MOCK USER ALIVE
-    /*
     const token = localStorage.getItem('token');
     if (token && !isTokenExpired(token)) {
       const stored = localStorage.getItem('user');
@@ -26,7 +23,6 @@ export const AuthProvider = ({ children }) => {
       clearSession();
     }
     setLoading(false);
-    */
   }, []);
 
   // ── Helpers ─────────────────────────────────────────────────────────────
