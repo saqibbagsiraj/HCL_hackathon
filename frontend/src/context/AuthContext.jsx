@@ -8,7 +8,7 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   // MOCK USER FOR DESIGN CHECK (Change back to null later)
-  const [user, setUser]       = useState({ name: 'Designer', email: 'test@test.com', role: 'RESTAURANT', token: 'fake' });
+  const [user, setUser]       = useState({ name: 'Designer', email: 'test@test.com', role: 'ADMIN', token: 'fake' });
   const [loading, setLoading] = useState(false);  // Set boolean false to bypass loading spinner
   const navigate = useNavigate();
 

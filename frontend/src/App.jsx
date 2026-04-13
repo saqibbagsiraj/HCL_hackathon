@@ -15,6 +15,7 @@ import Orders from './pages/user/Orders';
 import RestaurantDashboard from './pages/restaurant/RestaurantDashboard';
 import RestaurantMenu from './pages/restaurant/RestaurantMenu';
 import RestaurantOrders from './pages/restaurant/RestaurantOrders';
+import AdminDashboard from './pages/admin/AdminDashboard';
 
 // Placeholders for partner devs
 const Placeholder = ({ title }) => (
@@ -70,7 +71,7 @@ const App = () => {
           {/* Admin Routes */}
           <Route path="/admin">
             <Route index element={<Navigate to="dashboard" replace />} />
-            <Route path="dashboard"    element={<ProtectedRoute allowedRoles={['ADMIN']}><Placeholder title="Admin Dashboard" /></ProtectedRoute>} />
+            <Route path="dashboard"    element={<ProtectedRoute allowedRoles={['ADMIN']}><AdminDashboard /></ProtectedRoute>} />
             <Route path="manage-users" element={<ProtectedRoute allowedRoles={['ADMIN']}><Placeholder title="Manage Users" /></ProtectedRoute>} />
           </Route>
 

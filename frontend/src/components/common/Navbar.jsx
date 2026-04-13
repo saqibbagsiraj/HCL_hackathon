@@ -21,7 +21,6 @@ const NAV_LINKS = {
   ],
   ADMIN: [
     { path: '/admin/dashboard',    label: 'Dashboard', icon: '📊' },
-    { path: '/admin/manage-users', label: 'Users',     icon: '👥' },
   ],
   RESTAURANT: [
     { path: '/restaurant/dashboard', label: 'Dashboard', icon: '📊' },
