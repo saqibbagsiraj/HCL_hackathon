@@ -1,11 +1,18 @@
 package com.app.dto.request;
 
-public record RegisterRequest(
-        String name,
-        String email,
-        String password,
-        String phone,
-        String address,
-        String role
-) {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class RegisterRequest {
+
+    private String name;
+    private String email;
+    private String password;
+    private String phone;
+    private String address;
+    private String role;
 }

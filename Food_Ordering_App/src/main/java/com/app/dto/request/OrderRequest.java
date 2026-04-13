@@ -1,14 +1,24 @@
 package com.app.dto.request;
 
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-public record OrderRequest(
-        Integer restaurantId,
-        List<OrderItemRequest> items
-) {
-    public record OrderItemRequest(
-            Integer itemId,
-            Integer quantity
-    ) {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class OrderRequest {
+
+    private Integer restaurantId;
+    private List<OrderItemRequest> items;
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class OrderItemRequest {
+
+        private Integer itemId;
+        private Integer quantity;
     }
 }

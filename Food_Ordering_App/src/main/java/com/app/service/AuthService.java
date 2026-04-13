@@ -8,6 +8,7 @@ import com.app.entity.User;
 import com.app.exception.CustomException;
 import com.app.repository.RoleRepository;
 import com.app.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class AuthService {
 
     private static final Logger log = LoggerFactory.getLogger(AuthService.class);
@@ -28,38 +30,24 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
 
-    public AuthService(
-            UserRepository userRepository,
-            RoleRepository roleRepository,
-            PasswordEncoder passwordEncoder,
-            AuthenticationManager authenticationManager,
-            EmailService emailService
-    ) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.authenticationManager = authenticationManager;
-        this.emailService = emailService;
-    }
-
     @Transactional
     public AuthResponse register(RegisterRequest request) {
         validateRegisterRequest(request);
 
-        if (userRepository.existsByEmail(request.email())) {
+        if (userRepository.existsByEmail(request.getEmail())) {
             throw new CustomException(HttpStatus.CONFLICT, "Email is already registered");
         }
 
-        String roleName = request.role() == null || request.role().isBlank() ? "USER" : request.role().toUpperCase();
+        String roleName = request.getRole() == null || request.getRole().isBlank() ? "USER" : request.getRole().toUpperCase();
         Role role = roleRepository.findByName(roleName)
                 .orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST, "Invalid role"));
 
         User user = new User();
-        user.setName(request.name().trim());
-        user.setEmail(request.email().trim().toLowerCase());
-        user.setPassword(passwordEncoder.encode(request.password()));
-        user.setPhone(request.phone());
-        user.setAddress(request.address());
+        user.setName(request.getName().trim());
+        user.setEmail(request.getEmail().trim().toLowerCase());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setPhone(request.getPhone());
+        user.setAddress(request.getAddress());
         user.setRole(role);
 
         User savedUser = userRepository.save(user);
@@ -70,15 +58,15 @@ public class AuthService {
     }
 
     public AuthResponse login(LoginRequest request) {
-        if (request == null || isBlank(request.email()) || isBlank(request.password())) {
+        if (request == null || isBlank(request.getEmail()) || isBlank(request.getPassword())) {
             throw new CustomException(HttpStatus.BAD_REQUEST, "Email and password are required");
         }
 
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.email().trim().toLowerCase(), request.password())
+                new UsernamePasswordAuthenticationToken(request.getEmail().trim().toLowerCase(), request.getPassword())
         );
 
-        User user = userRepository.findByEmail(request.email().trim().toLowerCase())
+        User user = userRepository.findByEmail(request.getEmail().trim().toLowerCase())
                 .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "User not found"));
 
         log.info("User logged in successfully: {}", user.getEmail());
@@ -86,7 +74,7 @@ public class AuthService {
     }
 
     private void validateRegisterRequest(RegisterRequest request) {
-        if (request == null || isBlank(request.name()) || isBlank(request.email()) || isBlank(request.password())) {
+        if (request == null || isBlank(request.getName()) || isBlank(request.getEmail()) || isBlank(request.getPassword())) {
             throw new CustomException(HttpStatus.BAD_REQUEST, "Name, email and password are required");
         }
     }
