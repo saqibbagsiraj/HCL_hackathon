@@ -65,9 +65,8 @@ export const AuthProvider = ({ children }) => {
   // ── Register ─────────────────────────────────────────────────────────────
   const register = async (formData) => {
     const response = await registerApi(formData);
-    const { token, name, email } = response.data;
+    const { token, name, email, role } = response.data;
 
-    const role = getRoleFromToken(token);
     if (!role) throw new Error('Invalid token — no role found.');
 
     const userData = { name, email, role, token };
