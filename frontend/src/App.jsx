@@ -12,6 +12,9 @@ import Register from './pages/auth/Register';
 import Home from './pages/user/Home';
 import Cart from './pages/user/Cart';
 import Orders from './pages/user/Orders';
+import RestaurantDashboard from './pages/restaurant/RestaurantDashboard';
+import RestaurantMenu from './pages/restaurant/RestaurantMenu';
+import RestaurantOrders from './pages/restaurant/RestaurantOrders';
 
 // Placeholders for partner devs
 const Placeholder = ({ title }) => (
@@ -74,9 +77,9 @@ const App = () => {
           {/* Restaurant Routes */}
           <Route path="/restaurant">
             <Route index element={<Navigate to="dashboard" replace />} />
-            <Route path="dashboard" element={<ProtectedRoute allowedRoles={['RESTAURANT']}><Placeholder title="Restaurant Dashboard" /></ProtectedRoute>} />
-            <Route path="menu"      element={<ProtectedRoute allowedRoles={['RESTAURANT']}><Placeholder title="Restaurant Menu" /></ProtectedRoute>} />
-            <Route path="orders"    element={<ProtectedRoute allowedRoles={['RESTAURANT']}><Placeholder title="Restaurant Orders" /></ProtectedRoute>} />
+            <Route path="dashboard" element={<ProtectedRoute allowedRoles={['RESTAURANT']}><RestaurantDashboard /></ProtectedRoute>} />
+            <Route path="menu"      element={<ProtectedRoute allowedRoles={['RESTAURANT']}><RestaurantMenu /></ProtectedRoute>} />
+            <Route path="orders"    element={<ProtectedRoute allowedRoles={['RESTAURANT']}><RestaurantOrders /></ProtectedRoute>} />
           </Route>
 
           {/* Catch all */}

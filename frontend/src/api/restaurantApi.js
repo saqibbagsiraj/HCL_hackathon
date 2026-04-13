@@ -13,6 +13,12 @@ export const getRestaurantByIdApi = (id) =>
   axiosInstance.get(`/restaurants/${id}`);
 
 /**
+ * GET /api/restaurants/my
+ */
+export const getMyRestaurantApi = () =>
+  axiosInstance.get('/restaurants/my');
+
+/**
  * GET /api/restaurants/:id/menu
  */
 export const getMenuApi = (restaurantId) =>
@@ -23,3 +29,9 @@ export const getMenuApi = (restaurantId) =>
  */
 export const getMenuItemApi = (itemId) =>
   axiosInstance.get(`/menu/${itemId}`);
+
+/**
+ * POST /api/restaurants/:id/menu
+ */
+export const addMenuItemApi = (restaurantId, itemData) =>
+  axiosInstance.post(`/restaurants/${restaurantId}/menu`, itemData);

@@ -18,3 +18,9 @@ export const getMyOrdersApi = () =>
  */
 export const getOrderByIdApi = (id) =>
   axiosInstance.get(`/orders/${id}`);
+
+/**
+ * GET /api/restaurants/:id/orders  — list orders for a restaurant
+ */
+export const getRestaurantOrdersApi = (restaurantId) =>
+  axiosInstance.get(`/restaurants/${restaurantId}/orders`);
