@@ -54,7 +54,13 @@ public class AuthService {
         emailService.sendRegistrationSuccessEmail(savedUser.getEmail(), savedUser.getName());
         log.info("User registered successfully: {}", savedUser.getEmail());
 
-        return new AuthResponse("Registration successful", savedUser.getEmail(), role.getName(), "HTTP Basic");
+        return new AuthResponse(
+                "Registration successful",
+                savedUser.getUserId(),
+                savedUser.getEmail(),
+                role.getName(),
+                "HTTP Basic"
+        );
     }
 
     public AuthResponse login(LoginRequest request) {
@@ -70,7 +76,13 @@ public class AuthService {
                 .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "User not found"));
 
         log.info("User logged in successfully: {}", user.getEmail());
-        return new AuthResponse("Login successful", user.getEmail(), user.getRole().getName(), "HTTP Basic");
+        return new AuthResponse(
+                "Login successful",
+                user.getUserId(),
+                user.getEmail(),
+                user.getRole().getName(),
+                "HTTP Basic"
+        );
     }
 
     private void validateRegisterRequest(RegisterRequest request) {

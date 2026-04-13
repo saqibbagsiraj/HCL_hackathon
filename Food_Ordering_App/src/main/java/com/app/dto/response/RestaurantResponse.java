@@ -16,6 +16,7 @@ public class RestaurantResponse {
     private String location;
     private BigDecimal rating;
     private Boolean isActive;
+    private Integer ownerId;
     private String ownerName;
     private LocalDateTime createdAt;
 }
