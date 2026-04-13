@@ -32,15 +32,17 @@ public class OrderService {
     private final UserRepository userRepository;
     private final RestaurantRepository restaurantRepository;
     private final MenuRepository menuRepository;
-    private final EmailService emailService;
 
     @Transactional
     public OrderResponse placeOrder(String email, OrderRequest request) {
-        if (request == null || request.getRestaurantId() == null || request.getItems() == null || request.getItems().isEmpty()) {
+
+        if (request == null || request.getRestaurantId() == null
+                || request.getItems() == null || request.getItems().isEmpty()) {
             throw new CustomException(HttpStatus.BAD_REQUEST, "Restaurant and items are required");
         }
 
         User user = getUserByEmail(email);
+
         Restaurant restaurant = restaurantRepository.findById(request.getRestaurantId())
                 .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Restaurant not found"));
 
@@ -53,42 +55,52 @@ public class OrderService {
         BigDecimal total = BigDecimal.ZERO;
 
         for (OrderRequest.OrderItemRequest itemRequest : request.getItems()) {
-            if (itemRequest.getItemId() == null || itemRequest.getQuantity() == null || itemRequest.getQuantity() <= 0) {
-                throw new CustomException(HttpStatus.BAD_REQUEST, "Each item must have a valid itemId and quantity");
+
+            if (itemRequest.getItemId() == null || itemRequest.getQuantity() == null
+                    || itemRequest.getQuantity() <= 0) {
+                throw new CustomException(HttpStatus.BAD_REQUEST, "Invalid item or quantity");
             }
 
             MenuItem menuItem = menuRepository.findById(itemRequest.getItemId())
-                    .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Menu item not found: " + itemRequest.getItemId()));
+                    .orElseThrow(() -> new CustomException(
+                            HttpStatus.NOT_FOUND,
+                            "Menu item not found: " + itemRequest.getItemId()
+                    ));
 
             if (!restaurant.getRestaurantId().equals(menuItem.getRestaurant().getRestaurantId())) {
-                throw new CustomException(HttpStatus.BAD_REQUEST, "All items must belong to the selected restaurant");
+                throw new CustomException(HttpStatus.BAD_REQUEST, "Items must belong to same restaurant");
             }
 
             if (!Boolean.TRUE.equals(menuItem.getIsAvailable())) {
-                throw new CustomException(HttpStatus.BAD_REQUEST, "Menu item is unavailable: " + menuItem.getName());
+                throw new CustomException(HttpStatus.BAD_REQUEST, "Item unavailable: " + menuItem.getName());
             }
 
             OrderItem orderItem = new OrderItem();
             orderItem.setOrder(order);
             orderItem.setItem(menuItem);
             orderItem.setQuantity(itemRequest.getQuantity());
+
             orderItems.add(orderItem);
 
-            total = total.add(menuItem.getPrice().multiply(BigDecimal.valueOf(itemRequest.getQuantity())));
+            total = total.add(
+                    menuItem.getPrice().multiply(BigDecimal.valueOf(itemRequest.getQuantity()))
+            );
         }
 
         order.setTotalAmount(total);
         order.setOrderItems(orderItems);
 
         Order savedOrder = orderRepository.save(order);
-        emailService.sendOrderConfirmationEmail(user.getEmail(), savedOrder.getOrderId());
+
         log.info("Order {} created for user {}", savedOrder.getOrderId(), user.getEmail());
+
         return toResponse(savedOrder);
     }
 
     @Transactional(readOnly = true)
     public List<OrderResponse> getOrdersForUser(String email) {
         User user = getUserByEmail(email);
+
         return orderRepository.findByUserUserIdOrderByCreatedAtDesc(user.getUserId())
                 .stream()
                 .map(this::toResponse)
@@ -97,7 +109,9 @@ public class OrderService {
 
     @Transactional
     public OrderResponse cancelOrder(String email, Integer orderId) {
+
         User user = getUserByEmail(email);
+
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "Order not found"));
 
@@ -106,13 +120,15 @@ public class OrderService {
         }
 
         if ("CANCELLED".equals(order.getStatus())) {
-            throw new CustomException(HttpStatus.BAD_REQUEST, "Order is already cancelled");
+            throw new CustomException(HttpStatus.BAD_REQUEST, "Order already cancelled");
         }
 
         order.setStatus("CANCELLED");
+
         Order updatedOrder = orderRepository.save(order);
-        emailService.sendOrderCancellationEmail(user.getEmail(), updatedOrder.getOrderId());
+
         log.info("Order {} cancelled by user {}", updatedOrder.getOrderId(), user.getEmail());
+
         return toResponse(updatedOrder);
     }
 

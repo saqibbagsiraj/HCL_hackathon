@@ -68,7 +68,6 @@ public class RestaurantService {
                 restaurant.getLocation(),
                 restaurant.getRating(),
                 restaurant.getIsActive(),
-                restaurant.getOwner().getUserId(),
                 restaurant.getOwner().getName(),
                 restaurant.getCreatedAt()
         );
